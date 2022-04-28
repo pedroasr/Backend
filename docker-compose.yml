@@ -9,7 +9,7 @@ services:
       - MARIADB_PASSWORD=peliculas
       - MARIADB_DATABASE=peliculas
     ports:
-      - "3306:3306"
+      - 3306:3306
     expose:
       - 3306
     volumes:
@@ -24,8 +24,10 @@ services:
       - MARIA_USER_NAME=pedro
       - MARIA_USER_PASSWD=peliculas
       - MARIA_DATABASE_NAME=peliculas
+      - HTTP_HOST=0.0.0.0
+      - HTTP_PORT=3030
     ports:
-      - "3099:3099"
+      - 3099:3030
     depends_on:
       - mariadb
 
