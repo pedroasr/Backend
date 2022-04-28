@@ -1,0 +1,31 @@
+version: '3'
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: "mariadb"
+    environment:
+      - MARIADB_ROOT_PASSWORD=proyecto_peliculas
+      - MARIADB_USER=pedro
+      - MARIADB_PASSWORD=peliculas
+      - MARIADB_DATABASE=peliculas
+    ports:
+      - "3306:3306"
+    expose:
+      - 3306
+    volumes:
+      - ${PWD}/mariadb:/var/lib/mysql
+  lavideotecadelvago:
+    container_name: lavideotecadelvago
+    build: .
+    restart: always
+    environment:
+      - MARIA_HOST=mariadb
+      - MARIA_ROOT_PASSWD=proyecto_peliculas
+      - MARIA_USER_NAME=pedro
+      - MARIA_USER_PASSWD=peliculas
+      - MARIA_DATABASE_NAME=peliculas
+    ports:
+      - "3099:3099"
+    depends_on:
+      - mariadb
+
