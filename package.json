@@ -17,6 +17,7 @@
         "test-ci": "jest --collect-coverage",
         "publish-code-coverage": "codecov",
         "validate": "npm run lint && npm run test-ci",
+        "start:mariadb": "docker run --rm --detach --name tc-mariadb --env MARIADB_USER=pedro --env MARIADB_PASSWORD=peliculas --env MARIADB_DATABASE=peliculas --env MARIADB_ROOT_PASSWORD=proyecto_peliculas  -p 3306:3306 mariadb:latest",
         "pretty-quick": "pretty-quick --staged"
     },
     "author": "Pedro Antonio",

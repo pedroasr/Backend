@@ -25,9 +25,9 @@ services:
       - MARIA_USER_PASSWD=peliculas
       - MARIA_DATABASE_NAME=peliculas
       - HTTP_HOST=0.0.0.0
-      - HTTP_PORT=3030
+      - HTTP_PORT=4020
     ports:
-      - 3099:3030
+      - 3099:4020
     depends_on:
       - mariadb
 

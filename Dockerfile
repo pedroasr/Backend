@@ -12,6 +12,8 @@ RUN npm ci
 
 COPY ./dist ./
 
+COPY ./src/database/fillDatabase.txt ./database
+
 EXPOSE 3099
 
 CMD ["npm", "start"]
