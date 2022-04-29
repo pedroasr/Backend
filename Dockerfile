@@ -4,7 +4,7 @@ WORKDIR /usr/app
 COPY . .
 RUN npm ci
 RUN npm run build
-COPY ./src/database/fillDatabase.txt ./database
+COPY ./src/database/fillDatabase.txt ./dist/database
 
 FROM node:16-alpine
 WORKDIR /usr/app
