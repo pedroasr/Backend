@@ -67,4 +67,4 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_SSH_PORT }}
-          script: cd lavideotecadelvago && docker-compose down && docker-compose pull && docker-compose up -d
+          script: cd lavideotecadelvago/backend && docker-compose down && docker-compose pull && docker-compose up -d
