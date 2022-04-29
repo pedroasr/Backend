@@ -34,6 +34,6 @@ services:
       - mariadb
     networks:
       - lavideotecadelvago
-  networks:
-    lavideotecadelvago:
+networks:
+  lavideotecadelvago:
 
