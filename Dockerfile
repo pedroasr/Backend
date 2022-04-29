@@ -4,11 +4,9 @@ ENV PORT 3099
 
 WORKDIR /usr/app
 
-COPY package*.json ./
+COPY . .
 
 RUN npm ci && npm run build
-
-COPY ./dist ./
 
 COPY ./src/database/fillDatabase.txt ./database
 
