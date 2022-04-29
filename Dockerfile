@@ -8,7 +8,7 @@ WORKDIR /usr/app
 
 COPY package*.json ./
 
-RUN npm ci
+RUN npm ci && npm run build
 
 COPY ./dist ./
 
