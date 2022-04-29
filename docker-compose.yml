@@ -30,4 +30,6 @@ services:
       - 4020:3099
     depends_on:
       - mariadb
+  networks:
+    - lavideotecadelvago
 
