@@ -16,7 +16,7 @@ services:
       - ${PWD}/mariadb:/var/lib/mysql
   lavideotecadelvago:
     container_name: lavideotecadelvago
-    build: pachonio/backend_lavideotecadelvago
+    image: pachonio/backend_lavideotecadelvago
     restart: always
     environment:
       - MARIA_HOST=mariadb
