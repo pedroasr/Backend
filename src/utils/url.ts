@@ -14,9 +14,9 @@ export function getUrl(request: FastifyRequest, path: string | null): string {
 }
 
 function getPagedLink(request: FastifyRequest, page: number, pageSize: number, queryStrings: { [key:string]: string | number }): string {
-    const appendQueryStrings = Object.keys(queryStrings).map(k => `&${k}=${encodeURIComponent(queryStrings[k])}`).join();
+    //const appendQueryStrings = Object.keys(queryStrings).map(k => `&${k}=${encodeURIComponent(queryStrings[k])}`).join();
     const path = request.url.split('?')[0];
-    return getUrl(request, `${path}?page=${page}&pageSize=${pageSize}${appendQueryStrings}`);
+    return getUrl(request, `${path}?page=${page}`);
 }
 
 export function getPrevLink(request: FastifyRequest<{ Querystring: { page: number, pageSize: number, [key:string]: string | number } }>): string | undefined {

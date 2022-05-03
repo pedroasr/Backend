@@ -28,7 +28,7 @@ const listSchema = {
     tags: ['movies'],
     querystring: {
         page: { type: 'integer', minimum: 1, default: 1 },
-        pageSize: { type: 'integer', minimum: 1, maximum: 100, default: 10 },
+        pageSize: { type: 'integer', minimum: 1, maximum: 100, default: 9 },
         order: { type: 'string', default: 'default' }
     },
     response: {
