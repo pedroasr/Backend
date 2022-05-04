@@ -4,9 +4,7 @@ import { buildMovieServices } from './database/movie-service';
 import { Logger } from 'pino';
 import { SQL_DB } from './database/maria-db';
 
-
-export async function buildApp(logger : Logger, sqlDB : SQL_DB) {
-
+export async function buildApp(logger: Logger, sqlDB: SQL_DB) {
     const movieServices = buildMovieServices(sqlDB);
     const server = buildServer(logger, movieServices);
     return {

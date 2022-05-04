@@ -5,26 +5,27 @@ import { MovieServices } from './database/movie-service';
 import { buildMovieRoutes } from './routes/movie/movie-events';
 import fastifyCors from '@fastify/cors';
 
-export function buildServer(logger: Logger, movieServices : MovieServices): FastifyInstance {
+export function buildServer(
+    logger: Logger,
+    movieServices: MovieServices
+): FastifyInstance {
     const server = fastify({ logger });
     server.register(fastifyCors, {
-        origin:'*'
+        origin: '*'
     });
     server.register(async function routes(server: FastifyInstance) {
-
-        server.register(buildMovieRoutes(), { prefix: 'movies', movieServices});
-        server.setNotFoundHandler(function(request, reply: FastifyReply<Server>) {
-			reply.code(404).send({
-				statusCode: 404,
-				error: 'Not Found',
-				message: 'Resource not found'
-			});
-		});
-
+        server.register(buildMovieRoutes(), { prefix: '/', movieServices });
+        server.setNotFoundHandler(function (
+            request,
+            reply: FastifyReply<Server>
+        ) {
+            reply.code(404).send({
+                statusCode: 404,
+                error: 'Not Found',
+                message: 'Resource not found'
+            });
+        });
     });
 
     return server;
 }
-
-
-

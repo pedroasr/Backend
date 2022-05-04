@@ -6,7 +6,7 @@ import { SQL_DB } from './database/maria-db';
 export default function gracefulShutdown(
     app: App,
     logger: Logger,
-    maria : SQL_DB
+    maria: SQL_DB
 ): () => Promise<void> {
     const config = buildConfig();
     return async (): Promise<void> => {

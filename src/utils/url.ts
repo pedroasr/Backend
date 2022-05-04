@@ -13,18 +13,22 @@ export function getUrl(request: FastifyRequest, path: string | null): string {
     return `${protocol}://${hostname}${path ? removeEndSlash(path) : ''}`;
 }
 
-function getPagedLink(request: FastifyRequest, page: number, pageSize: number, queryStrings: { [key:string]: string | number }): string {
-    //const appendQueryStrings = Object.keys(queryStrings).map(k => `&${k}=${encodeURIComponent(queryStrings[k])}`).join();
+function getPagedLink(request: FastifyRequest, page: number): string {
     const path = request.url.split('?')[0];
     return getUrl(request, `${path}?page=${page}`);
 }
 
-export function getPrevLink(request: FastifyRequest<{ Querystring: { page: number, pageSize: number, [key:string]: string | number } }>): string | undefined {
-    const { page, pageSize, ...rest } = request.query;
-    return page !== 1 ? getPagedLink(request, page - 1, pageSize, rest) : undefined;
+export function getPrevLink(
+    request: FastifyRequest<{ Querystring: { page: number } }>
+): string | undefined {
+    const { page } = request.query;
+    return page !== 1 ? getPagedLink(request, page - 1) : undefined;
 }
 
-export function getNextLink(request: FastifyRequest<{ Querystring: { page: number, pageSize: number, [key:string]: string | number } }>, results: Movie[]): string | undefined {
-    const { page, pageSize, ...rest } = request.query;
-    return results.length === pageSize ? getPagedLink(request, page + 1, pageSize, rest) : undefined;
+export function getNextLink(
+    request: FastifyRequest<{ Querystring: { page: number } }>,
+    results: Movie[]
+): string | undefined {
+    const { page } = request.query;
+    return results.length === 9 ? getPagedLink(request, page + 1) : undefined;
 }
