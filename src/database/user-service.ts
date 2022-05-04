@@ -14,7 +14,11 @@ export type UserServices = {
     signup(user: User): Promise<boolean>;
     login(user: User): Promise<[string, boolean]>;
     userInfo(user: User): Promise<[UserInfo | string, boolean]>;
-    opinion(userId: number, movieId: number, opinion: string): Promise<[string, boolean]>;
+    opinion(
+        userId: number,
+        movieId: number,
+        opinion: string
+    ): Promise<[string, boolean]>;
     updateProfileImg(userId: number, image: string): Promise<[string, boolean]>;
 };
 
@@ -26,29 +30,40 @@ export function buildMovieServices(db: SQL_DB): UserServices {
             );
             return querySignup ? true : false;
         },
-        async login(user: User): Promise<[string , boolean]> {
+        async login(user: User): Promise<[string, boolean]> {
             const queryLogin = await db.runQuery(
                 `SELECT ISNULL(username, '') FROM users WHERE username=${user.username} AND password=${user.password};`
             );
-            return queryLogin ? [queryLogin, true] : ['El usuario y/o la contraseña no coinciden.', false];
+            return queryLogin
+                ? [queryLogin, true]
+                : ['El usuario y/o la contraseña no coinciden.', false];
         },
-        async userInfo(user: User): Promise<[UserInfo | string, boolean]>{
+        async userInfo(user: User): Promise<[UserInfo | string, boolean]> {
             const queryUserInfo = await db.runQuery(
                 `SELECT ISNULL(username, ''), profileImg FROM users WHERE username=${user.username};`
             );
-            return queryUserInfo ? [queryUserInfo, true] : ['No se ha encontrado el usuario', false];
+            return queryUserInfo
+                ? [queryUserInfo, true]
+                : ['No se ha encontrado el usuario', false];
         },
-        async opinion(userId: number, movieId: number, opinion: string): Promise<[string, boolean]>{
+        async opinion(
+            userId: number,
+            movieId: number,
+            opinion: string
+        ): Promise<[string, boolean]> {
             const queryOpinion = await db.runQuery(
                 `INSERT INTO opinions (userID, movieID, opinion) VALUES (${userId}, ${movieId}, ${opinion};`
             );
             return [queryOpinion, true];
         },
-        async updateProfileImg(userId: number, image: string): Promise<[string, boolean]>{
+        async updateProfileImg(
+            userId: number,
+            image: string
+        ): Promise<[string, boolean]> {
             const queryImg = await db.runQuery(
                 `INSERT INTO users (profileImg) VALUES (${image}) WHERE id=${userId};`
             );
             return [queryImg, true];
         }
-    }
+    };
 }

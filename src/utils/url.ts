@@ -13,25 +13,29 @@ export function getUrl(request: FastifyRequest, path: string | null): string {
     return `${protocol}://${hostname}${path ? removeEndSlash(path) : ''}`;
 }
 
-function getPagedLink(request: FastifyRequest, page: number, gender?: string): string {
+function getPagedLink(
+    request: FastifyRequest,
+    page: number,
+    gender?: string
+): string {
     const path = request.url.split('?')[0];
-    if (!gender)
-        return getUrl(request, `${path}?page=${page}`);
-    else
-        return getUrl(request, `${path}?gender=${gender}&page=${page}`);
+    if (!gender) return getUrl(request, `${path}?page=${page}`);
+    else return getUrl(request, `${path}?gender=${gender}&page=${page}`);
 }
 
 export function getPrevLink(
-    request: FastifyRequest<{ Querystring: { page: number, gender?: string } }>
+    request: FastifyRequest<{ Querystring: { page: number; gender?: string } }>
 ): string | undefined {
     const { page, gender } = request.query;
     return page !== 1 ? getPagedLink(request, page - 1, gender) : undefined;
 }
 
 export function getNextLink(
-    request: FastifyRequest<{ Querystring: { page: number, gender?: string } }>,
+    request: FastifyRequest<{ Querystring: { page: number; gender?: string } }>,
     results: Movie[]
 ): string | undefined {
     const { page, gender } = request.query;
-    return results.length === 9 ? getPagedLink(request, page + 1, gender) : undefined;
+    return results.length === 9
+        ? getPagedLink(request, page + 1, gender)
+        : undefined;
 }
