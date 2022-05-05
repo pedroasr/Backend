@@ -55,12 +55,11 @@ export function buildUserRoutes(): FastifyPluginCallback<{
             reply: FastifyReply<Server>
         ) {
             const { username, password } = request.body;
-            const user = await userServices.signup({
+            await userServices.signup({
                 username,
                 password
             });
-            if (!user) reply.status(409).send('Fail to signup the user.');
-            else reply.status(201).send();
+            reply.status(201).send(`Usuario ${username} creado`);
         }
 
         async function loginUser(
@@ -74,8 +73,7 @@ export function buildUserRoutes(): FastifyPluginCallback<{
         ) {
             const { username, password } = request.body;
             const user = await userServices.login({ username, password });
-            if (user[1]) reply.status(204).send(user[0]);
-            else reply.status(409).send(user[0]);
+            reply.status(200).send(`Usuario ${user[1]} logeado.`);
         }
 
         fastify.post('/signup', { schema: signupSchema }, signupUser);

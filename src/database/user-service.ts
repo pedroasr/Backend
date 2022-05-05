@@ -12,7 +12,7 @@ export type UserInfo = {
 
 export type UserServices = {
     signup(user: User): Promise<boolean>;
-    login(user: User): Promise<[string, boolean]>;
+    login(user: User): Promise<[number, string]>;
     userInfo(user: User): Promise<[UserInfo | string, boolean]>;
     opinion(
         userId: number,
@@ -32,17 +32,15 @@ export function buildUserServices(db: SQL_DB): UserServices {
             );
             return querySignup ? true : false;
         },
-        async login(user: User): Promise<[string, boolean]> {
+        async login(user: User): Promise<[number, string]> {
             const queryLogin = await db.runQuery(
-                `SELECT ISNULL(username, '') FROM users WHERE username=${user.username} AND password=${user.password};`
+                `SELECT id FROM users WHERE username = '${user.username}' AND password = '${user.password}';`
             );
-            return queryLogin
-                ? [`Bienvenido ${user.username}`, true]
-                : ['El usuario y/o la contraseña no coinciden.', false];
+            return [queryLogin, user.username];
         },
         async userInfo(user: User): Promise<[UserInfo | string, boolean]> {
             const queryUserInfo = await db.runQuery(
-                `SELECT ISNULL(username, ''), profileImg FROM users WHERE username=${user.username};`
+                `SELECT username, profileImg FROM users WHERE username=${user.username};`
             );
             return queryUserInfo
                 ? [queryUserInfo, true]
@@ -54,7 +52,7 @@ export function buildUserServices(db: SQL_DB): UserServices {
             opinion: string
         ): Promise<[string, boolean]> {
             const queryOpinion = await db.runQuery(
-                `INSERT INTO opinions (userID, movieID, opinion) VALUES (${userId}, ${movieId}, ${opinion};`
+                `INSERT INTO opinions (userID, movieID, opinion) VALUES ('${userId}', '${movieId}', '${opinion}';`
             );
             return [queryOpinion, true];
         },
