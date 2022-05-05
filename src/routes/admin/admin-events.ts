@@ -5,17 +5,17 @@ import {
     FastifyRequest
 } from 'fastify';
 import { Server } from 'http';
-import { AdminServices, PostMovie } from '../../database/admin-services';
-import { getUrl } from '../../utils/url';
+import { AdminServices } from '../../database/admin-services';
 
 const movieFullSchema = {
     type: 'object',
     properties: {
+        id: { type: 'number' },
         name: { type: 'string' },
         image: { type: 'string' },
         description: { type: 'string' },
         gender: { type: 'string' },
-        release_year: { type: 'integer' },
+        release_year: { type: 'number' },
         rate: { type: 'number' }
     }
 };
@@ -43,21 +43,10 @@ const deleteSchema = {
 
 const createUpdateRuleSchemaBody = {
     type: 'object',
-    required: [
-        'name',
-        'image',
-        'description',
-        'gender',
-        'release_year',
-        'rate'
-    ],
     properties: {
         name: { type: 'string' },
         image: { type: 'string' },
-        description: {
-            type: 'string',
-            errorMessage: 'should be a valid description'
-        },
+        description: { type: 'string'},
         gender: { type: 'string' },
         release_year: { type: 'number' },
         rate: { type: 'number' }
@@ -81,23 +70,24 @@ export function buildAdminRoutes(): FastifyPluginCallback<{
         async function postMovie(
             request: FastifyRequest<{
                 Body: {
-                    movie: PostMovie;
+                    name: string;
+                    image: string;
+                    description: string;
+                    gender: string;
+                    release_year: number;
+                    rate: number;
                 };
             }>,
             reply: FastifyReply<Server>
         ) {
-            const moviePost = await adminServices.post(request.body.movie);
+            const { name, image, description, gender, release_year, rate } = request.body;
+            const moviePost = await adminServices.post({ name, image, description, gender, release_year, rate });
             if (typeof moviePost === 'boolean')
                 reply
                     .status(409)
                     .send('Fail to create the movie. Probably repeated name.');
-            else {
-                reply.header(
-                    'Movie',
-                    getUrl(request, `/movie/${moviePost.id}`)
-                );
+            else 
                 reply.status(201).send(moviePost);
-            }
         }
 
         async function deleteMovie(

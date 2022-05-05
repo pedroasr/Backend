@@ -12,6 +12,7 @@ async function main() {
     logger.info(`Starting ${config.projectName}`);
     const { http, maria } = config;
     const sqlDB = buildSQLDatabase(maria);
+
     await sqlDB.init();
 
     const app = await buildApp(logger, sqlDB);

@@ -18,7 +18,10 @@ export function buildServer(
     });
     server.register(async function routes(server: FastifyInstance) {
         server.register(buildMovieRoutes(), { prefix: '/', movieServices });
-        server.register(buildAdminRoutes(), { prefix: '/admin', adminServices })
+        server.register(buildAdminRoutes(), {
+            prefix: '/admin',
+            adminServices
+        });
         server.setNotFoundHandler(function (
             request,
             reply: FastifyReply<Server>
