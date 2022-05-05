@@ -23,10 +23,10 @@ const movieFullSchema = {
 const movieIdParam = {
     type: 'object',
     properties: {
-      id: {
-        type: 'string',
-        description: 'movie identifier',
-      }
+        id: {
+            type: 'string',
+            description: 'movie identifier'
+        }
     },
     errorMessage: 'movie id must be a valid ObjectId'
 };
@@ -43,11 +43,21 @@ const deleteSchema = {
 
 const createUpdateRuleSchemaBody = {
     type: 'object',
-    required: [ 'name', 'image', 'description', 'gender', 'release_year', 'rate' ],
+    required: [
+        'name',
+        'image',
+        'description',
+        'gender',
+        'release_year',
+        'rate'
+    ],
     properties: {
         name: { type: 'string' },
         image: { type: 'string' },
-        description: { type: 'string', errorMessage: 'should be a valid description' },
+        description: {
+            type: 'string',
+            errorMessage: 'should be a valid description'
+        },
         gender: { type: 'string' },
         release_year: { type: 'number' },
         rate: { type: 'number' }
@@ -71,25 +81,35 @@ export function buildAdminRoutes(): FastifyPluginCallback<{
         async function postMovie(
             request: FastifyRequest<{
                 Body: {
-                    movie: PostMovie 
+                    movie: PostMovie;
                 };
-            }>, reply: FastifyReply<Server>
+            }>,
+            reply: FastifyReply<Server>
         ) {
             const moviePost = await adminServices.post(request.body.movie);
             if (typeof moviePost === 'boolean')
-                reply.status(409).send('Fail to create the movie. Probably repeated name.');  
+                reply
+                    .status(409)
+                    .send('Fail to create the movie. Probably repeated name.');
             else {
-                reply.header('Movie', getUrl(request, `/movie/${moviePost.id}`));
+                reply.header(
+                    'Movie',
+                    getUrl(request, `/movie/${moviePost.id}`)
+                );
                 reply.status(201).send(moviePost);
             }
         }
 
         async function deleteMovie(
-            request: FastifyRequest<{ Querystring: { id: string } }>, reply: FastifyReply<Server>
+            request: FastifyRequest<{ Querystring: { id: string } }>,
+            reply: FastifyReply<Server>
         ) {
             const { id } = request.query;
-            await adminServices.delete(id);
-            reply.status(204).send();
+            const deleteMovie = await adminServices.delete(id);
+            if(deleteMovie)
+                reply.status(204).send();
+            else
+                reply.status(409).send('Error to delete the movie.');
         }
 
         fastify.post('/post', { schema: createSchema }, postMovie);
