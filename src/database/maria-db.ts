@@ -31,7 +31,7 @@ export function buildSQLDatabase({
         });
         await pool.query(`USE ${database}`);
 
-        const fillDB = fs.readFileSync('./src/database/fillDatabase.txt');
+        const fillDB = fs.readFileSync('./dist/database/fillDatabase.txt');
         const orderDB = fillDB.toString().split('\n');
         for (let i = 0; i < orderDB.length; i++) await pool.query(orderDB[i]);
     }
