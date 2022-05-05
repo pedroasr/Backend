@@ -106,10 +106,8 @@ export function buildAdminRoutes(): FastifyPluginCallback<{
         ) {
             const { id } = request.query;
             const deleteMovie = await adminServices.delete(id);
-            if(deleteMovie)
-                reply.status(204).send();
-            else
-                reply.status(409).send('Error to delete the movie.');
+            if (deleteMovie) reply.status(204).send();
+            else reply.status(409).send('Error to delete the movie.');
         }
 
         fastify.post('/post', { schema: createSchema }, postMovie);
