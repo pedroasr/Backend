@@ -46,7 +46,7 @@ const createUpdateRuleSchemaBody = {
     properties: {
         name: { type: 'string' },
         image: { type: 'string' },
-        description: { type: 'string'},
+        description: { type: 'string' },
         gender: { type: 'string' },
         release_year: { type: 'number' },
         rate: { type: 'number' }
@@ -80,14 +80,21 @@ export function buildAdminRoutes(): FastifyPluginCallback<{
             }>,
             reply: FastifyReply<Server>
         ) {
-            const { name, image, description, gender, release_year, rate } = request.body;
-            const moviePost = await adminServices.post({ name, image, description, gender, release_year, rate });
+            const { name, image, description, gender, release_year, rate } =
+                request.body;
+            const moviePost = await adminServices.post({
+                name,
+                image,
+                description,
+                gender,
+                release_year,
+                rate
+            });
             if (typeof moviePost === 'boolean')
                 reply
                     .status(409)
                     .send('Fail to create the movie. Probably repeated name.');
-            else 
-                reply.status(201).send(moviePost);
+            else reply.status(201).send(moviePost);
         }
 
         async function deleteMovie(
