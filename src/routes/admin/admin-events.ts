@@ -41,7 +41,7 @@ const deleteSchema = {
     }
 };
 
-const createUpdateRuleSchemaBody = {
+const createMovieSchemaBody = {
     type: 'object',
     properties: {
         name: { type: 'string' },
@@ -55,7 +55,7 @@ const createUpdateRuleSchemaBody = {
 
 const createSchema = {
     tags: ['movie'],
-    body: createUpdateRuleSchemaBody,
+    body: createMovieSchemaBody,
     response: {
         201: movieFullSchema
     }

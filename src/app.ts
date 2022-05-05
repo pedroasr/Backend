@@ -4,11 +4,18 @@ import { buildMovieServices } from './database/movie-service';
 import { Logger } from 'pino';
 import { SQL_DB } from './database/maria-db';
 import { buildAdminServices } from './database/admin-services';
+import { buildUserServices } from './database/user-service';
 
 export async function buildApp(logger: Logger, sqlDB: SQL_DB) {
     const movieServices = buildMovieServices(sqlDB);
     const adminServices = buildAdminServices(sqlDB);
-    const server = buildServer(logger, movieServices, adminServices);
+    const userServices = buildUserServices(sqlDB);
+    const server = buildServer(
+        logger,
+        movieServices,
+        adminServices,
+        userServices
+    );
     return {
         async close(): Promise<void> {
             await server.close();

@@ -22,11 +22,13 @@ export type UserServices = {
     updateProfileImg(userId: number, image: string): Promise<[string, boolean]>;
 };
 
-export function buildMovieServices(db: SQL_DB): UserServices {
+export function buildUserServices(db: SQL_DB): UserServices {
     return {
         async signup(user: User): Promise<boolean> {
+            // El sistema no esta pensado para que dos usuarios compartan username.
+            // Será necesario arreglarlo en un futuro.
             const querySignup = await db.runQuery(
-                `INSERT INTO users (username, password) VALUES (${user.username}, ${user.password});`
+                `INSERT INTO users (username, password) VALUES ('${user.username}', '${user.password}');`
             );
             return querySignup ? true : false;
         },
@@ -35,7 +37,7 @@ export function buildMovieServices(db: SQL_DB): UserServices {
                 `SELECT ISNULL(username, '') FROM users WHERE username=${user.username} AND password=${user.password};`
             );
             return queryLogin
-                ? [queryLogin, true]
+                ? [`Bienvenido ${user.username}`, true]
                 : ['El usuario y/o la contraseña no coinciden.', false];
         },
         async userInfo(user: User): Promise<[UserInfo | string, boolean]> {
