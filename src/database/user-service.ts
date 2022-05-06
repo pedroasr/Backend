@@ -10,9 +10,14 @@ export type UserInfo = {
     profileImg: string;
 };
 
+export type UserF = {
+    id: number;
+    username: string;
+}
+
 export type UserServices = {
-    signup(user: User): Promise<boolean>;
-    login(user: User): Promise<[number, string]>;
+    signup(user: User): Promise<UserF>;
+    login(user: User): Promise<UserF>;
     userInfo(user: User): Promise<[UserInfo | string, boolean]>;
     opinion(
         userId: number,
@@ -24,19 +29,22 @@ export type UserServices = {
 
 export function buildUserServices(db: SQL_DB): UserServices {
     return {
-        async signup(user: User): Promise<boolean> {
+        async signup(user: User): Promise<UserF> {
             // El sistema no esta pensado para que dos usuarios compartan username.
             // Será necesario arreglarlo en un futuro.
-            const querySignup = await db.runQuery(
+            await db.runQuery(
                 `INSERT INTO users (username, password) VALUES ('${user.username}', '${user.password}');`
             );
-            return querySignup ? true : false;
+            const queryGetId = await db.runQuery(
+                `SELECT id FROM users WHERE username = '${user.username}';`
+            );
+            return { id: queryGetId, username: user.username };  
         },
-        async login(user: User): Promise<[number, string]> {
+        async login(user: User): Promise<UserF> {
             const queryLogin = await db.runQuery(
                 `SELECT id FROM users WHERE username = '${user.username}' AND password = '${user.password}';`
             );
-            return [queryLogin, user.username];
+            return { id: queryLogin, username: user.username };
         },
         async userInfo(user: User): Promise<[UserInfo | string, boolean]> {
             const queryUserInfo = await db.runQuery(

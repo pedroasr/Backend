@@ -73,7 +73,7 @@ export function buildUserRoutes(): FastifyPluginCallback<{
         ) {
             const { username, password } = request.body;
             const user = await userServices.login({ username, password });
-            reply.status(200).send(`Usuario ${user[1]} logeado.`);
+            reply.send(user);
         }
 
         fastify.post('/signup', { schema: signupSchema }, signupUser);
